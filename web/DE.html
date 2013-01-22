@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+		<title>Diferencijska evolucija</title>
+	</head>
+
+	<body>
+		<h1>Diferencijska evolucija</h1>
+		<p>
+			PAŽNJA!<br />
+			Biblioteka JFreeChart koja se koristi je malo veća te stoga i učitavanje appleta prvi puta traje malo duže. Budite strpljivi.<br />
+			Također morate imati instaliran Java plugin za Vaš preglednik kako biste mogli pokrenuti program.
+		</p>
+		<script src="http://www.java.com/js/deployJava.js"></script>
+		<script> 
+			var attributes = { 
+				code : 'ea.DiferencijskaEvolucijaAlgoritam', 
+				archive : "ea.jar,exp4j-0.2.9.jar,jcommon-1.0.16.jar,jfreechart-1.0.13.jar" ,
+				width : 140, 
+				height : 35
+			} ;  
+			deployJava.runApplet(attributes, { }, '1.6'); 
+		</script>
+		<div>
+			<p>
+				<a href="index.html" title="Evolucijski algoritmi">Evolucijski algoritmi</a>
+			</p>
+			<h2>Pojašnjenje opcija</h2>
+			<dl>
+				<dt><b>Funkcija</b></dt>
+				<dd>
+					funkcija koja se koristi kao referentna (služi za stvaranje uzoraka). Neke česte funkcije su
+					<ul>
+						<li><b>x^y</b> - x sa eksponentom y gdje je y neki broj</li>
+						<li><b>sin(x)</b> - sinus od x</li>
+						<li><b>cos(x)</b> - kosinus od x</li>
+						<li><b>exp(x)</b> - baza e sa eksponentom x</li>
+					</ul>
+				</dd>
+				<dt><b>Sjeme</b></dt>
+				<dd>
+					Cijeli broj koji se koristi kao sjeme za generator nasumičnih brojeva
+				</dd>
+				<dt><b>Od - Do</b></dt>
+				<dd>
+					Granice domene funkcije. Određuje raspon koji se iscrtava
+				</dd>
+				<dt><b>Broj točaka</b></dt>
+				<dd>
+					Broj koji kaže koliko će se točaka izračunati radi crtanja funkcije. Veći broj 
+					točaka, funkcija je bolje iscrtana
+				</dd>
+				<dt><b>Broj uzoraka</b></dt>
+				<dd>
+					Određuje koliko uzoraka stvaramo na za aproksimaciju. Uzorci su jednoliko raspoređeni
+					po domeni funkcije
+				</dd>
+				<dt><b>Granice koeficijenata</b></dt>
+				<dd>
+					Određuje granice koeficijenata koji se mogu pojaviti. Služi za stvaranje inicijalnih vektora
+				</dd>
+				<dt><b>Red polinoma</b></dt>
+				<dd>
+					Određuje koji je red polinoma kojim se aproksimira skup točaka. Polinom reda 0 je konstanta
+				</dd>
+				<dt id="velicinaPopulacije"><b>Broj vektora</b></dt>
+				<dd>
+					Broj vektora unutar jedne populacije
+				</dd>
+				<dt><b>Vrsta mutacije</b></dt>
+				<dd>
+					Odruđuje kako se računa vjerojatnost p za izvršavanje mutacije. Mutacija se vrši po formuli
+					<img src="./img/formulaMutacija.gif" alt="Mutacija formula" /> 
+					gdje su
+					<ul>
+						<li>
+							<img src="./img/V.gif" alt="V" /> - mutirani vektor
+						</li>
+						<li>
+							<img src="./img/S.gif" alt="V" /> - vektor koji mutira
+						</li>
+						<li>
+							<img src="./img/K.gif" alt="V" /> - vektor donor dobiven 
+							<a href="#selekcija" title="Selekcija">selekcijom</a>
+						</li>
+						<li>
+							<img src="./img/W.gif" alt="V" /> - 
+							<a href="#tezina" title="Faktor težine">
+								Faktor težine
+							</a>
+						</li>
+					</ul>
+					Moguće mutacije su
+					<ul>
+						<li>
+							<b>Binomna</b> - ako je p u rasponu [0, 
+							<a href="#vjerojatnostMutacije" title="Vjerojatnost mutacije">
+								vjerojatnost mutacije
+							</a> tada se indeks i mutira, u suprotnom mutirani vektor poprima 
+							vrijednost vektora koji mutira. Vjerojatnost p je uniformno
+							distribuirani broj u rasponu [0, 1>
+						</li>
+						<li>
+							<b>Uniformna</b> - dok god je p u rasponu [0, 
+							<a href="#vjerojatnostMutacije" title="Vjerojatnost mutacije">
+								vjerojatnost mutacije
+							</a> indeks i se mutira. Nakon zadnje mutiranog indeksa, svi ostali
+							indeksi samo poprime vrijednost vektora koji mutira. Vjerojatnost p 
+							je uniformno distribuirani broj u rasponu [0, 1>							
+						</li>
+					</ul>
+				</dd>
+				<dt id="vjerojatnostMutacije"><b>Vjerojatnost mutacije</b></dt>
+				<dd>
+					Određuje vjerojatnost mutacije elemenata vektora. Mora biti u rasponu [0, 1]
+				</dd>
+				<dt><b>Selekcija</b></dt>
+				<dd>
+					Odruđuje kako se selektiraju vektor donor i vektor koji mutira. Vektor donor se
+					određuje na sljedeći način. 
+					<pre>
+tempVektor = 0
+Za i = 0; i < <a href="#brojParova" title="Broj parova">broj parova</a>
+	prvi = nasumicniVektor()
+	drugi = nasimicniVektor()
+	//Tako da prvi i drugi nisu niti jednom do sada selektirani
+	//tj. svaki vektor se smije koristiti nula ili jedan put
+	//iz populacije
+	tempVektor += prvi - drugi
+vrati tempVektor
+					</pre>
+					Selekcije vektora koji mutira su sljedeće
+					<ul>
+						<li><b>Najbolji vektor</b> - odabire se vektor koji je najbolji u populaciji</li>
+						<li><b>Nasumični vektor</b> - odabire se načumicno neki vektor iz populacije</li>
+					</ul>
+				</dd>
+				<dt id="brojParova"><b>Broj parova</b></dt>
+				<dd>
+					Određuje koliko parova se koristi za stvaranje vektora donora
+				</dd>
+				<dt id="tezina"><b>Faktor težine</b></dt>
+				<dd>
+					Određuje koliko vektor donor pridonosi promjeni samog vektora koji mutira. Vrijednost je u rasponu 
+					[0, 2]
+				</dd>
+				<dt><b>Broj generacija</b></dt>
+				<dd>
+					Određuje nakon koliko generacija se prestaje sa evoluiranjem populacije
+				</dd>
+			</dl>
+		</div>
+		<hr>
+		<div>
+			Korišteni alati otvorenog koda
+			<ul>
+				<li>
+					<a href="http://www.jfree.org/jfreechart/" title="JFreeChart">JFreeChart</a>
+				</li>
+				<li>
+					<a href="http://projects.congrace.de/exp4j/" title="exp4j">exp4j</a>
+				</li>
+			</ul>
+		</div>
+	</body>	
+</html>

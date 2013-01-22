@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+		<title>Umjetni imunološki sustav</title>
+	</head>
+
+	<body>
+		<h1>Umjetni imunološki sustav</h1>
+		<p>
+			PAŽNJA!<br />
+			Biblioteka JFreeChart koja se koristi je malo veća te stoga i učitavanje appleta prvi puta traje malo duže. Budite strpljivi.<br />
+			Također morate imati instaliran Java plugin za Vaš preglednik kako biste mogli pokrenuti program.
+		</p>
+		<script src="http://www.java.com/js/deployJava.js"></script>
+		<script> 
+			var attributes = { 
+				code : 'ea.UmjetniImunoloskiSustavAlgoritam', 
+				archive : "ea.jar,exp4j-0.2.9.jar,jcommon-1.0.16.jar,jfreechart-1.0.13.jar" ,
+				width : 140, 
+				height : 35
+			} ;  
+			deployJava.runApplet(attributes, { }, '1.6'); 
+		</script>
+		<div>
+			<p>
+				<a href="index.html" title="Evolucijski algoritmi">Evolucijski algoritmi</a>
+			</p>
+			<h2>Pojašnjenje opcija</h2>
+			<dl>
+				<dt><b>Funkcija</b></dt>
+				<dd>
+					funkcija čiji se ekstrem traži. Neke česte funkcije su
+					<ul>
+						<li><b>x^y</b> - x sa eksponentom y gdje je y neki broj</li>
+						<li><b>sin(x)</b> - sinus od x</li>
+						<li><b>cos(x)</b> - kosinus od x</li>
+						<li><b>exp(x)</b> - baza e sa eksponentom x</li>
+					</ul>
+				</dd>
+				<dt><b>Sjeme</b></dt>
+				<dd>
+					Cijeli broj koji se koristi kao sjeme za generator nasumičnih brojeva
+				</dd>
+				<dt><b>Od - Do</b></dt>
+				<dd>
+					Granice domene funkcije. Određuje raspon koji se pretražuje i iscrtava
+				</dd>
+				<dt><b>Broj točaka</b></dt>
+				<dd>
+					Broj koji kaže koliko će se točaka izračunati radi crtanja funkcije. Veći broj 
+					točaka, funkcija je bolje iscrtana
+				</dd>	
+				<dt><b>Traži</b></dt>
+				<dd>
+					Određuje tražimo li minimum ili maksimum funkcije
+				</dd>
+				<dt id="velicinaPopulacije"><b>Broj antitijela</b></dt>
+				<dd>
+					Broj antitijela koji pretražuju prostor
+				</dd>
+				<dt id="brojBitova"><b>Broj bitova</b></dt>
+				<dd>
+					Određuje koliko bitova se koristi po varijabli za kodiranje vrijednosti
+				</dd>
+				<dt id="vrstaMutacije"><b>Vrsta mutacije</b></dt>
+				<dd>
+					Određuje koja se mutacija koristi za unošenje varijacija u populaciju
+					<ul>
+						<li><b>Nema</b> - ne koristi mutaciju</li>
+						<li>
+							<b>Jedan bit</b> - na proizvoljnom mjestu u rasponu [0, 2 * 
+							<a href="#brojBitova" title="Broj bitova">broj bitova</a>]
+							se invertira bit
+						</li>
+						<li>
+							<b>Jedan bit varijable</b> - na proizvoljnom mjestu u rasponu [0, 
+							<a href="#brojBitova" title="Broj bitova">broj bitova</a>]
+							se invertira bit za svaku pojedinu varijablu
+						</li>
+						<li"id="distribuiranaMutacija">
+							<b>Distribuirana</b> - invertira sve bitove kojima je vjerojatnost
+							invertiranja manja od vjerojatnosti dobivene izrazom 
+							<img src="img/distribuirana.gif" title="Distribuirana" /> gdje su 
+							<ul>
+								<li>
+									<img src="./img/ro.gif" alt="ro" /> - 
+									konstanta <a href="#ro" title="ro">ro</a>
+								</li>
+								<li>
+									<img src="./img/fMin.gif" alt="Najmanji faktor dobrote" /> - 
+									najmanji faktor dobrote u trenutnoj populaciji antitijela
+								</li>
+								<li>
+									<img src="./img/fTren.gif" alt="Trenutni faktor dobrote" /> - 
+									faktor dobrote antitijela koje mutira
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</dd>
+				<dt id="ro"><b>Ro</b></dt>
+				<dd>
+					Konstanta koja određuje kako brzo funkcija razdiobe teži u 0 kod
+					<a href="#distribuiranaMutacija" title="Distribuirana mutacija">
+						distribuirane mutacije
+					</a>. 
+					Veća vrijednost, manje bitova će biti invertirano.
+				</dd>
+				<dt><b>Algoritam</b></dt>
+				<dd>
+					Određuje koji se algoritam koristi.
+					<ul>
+						<li><a href="#SAIS" title="Simple AIS">Simple AIS</a></li>
+						<li><a href="#CLOPNGALG" title="CLONGALG">CLONALG</a></li>
+					</ul>
+				</dd>
+				<dt id="brojKlonova"><b>Broj klonova</b></dt>
+				<dd>
+					Određuje koliko klonova nastaje od pojedinog antitijela kod 
+					<a href="#SAIS" title="Simple AIS">Simple AIS</a> algoritma
+				</dd>
+				<dt id="beta"><b>Beta</b></dt>
+				<dd>
+					Najbolje antitijelo ima beta * 
+					<a href="#velicinaPopulacije" title="Broj antitijela">
+						broj antitijela
+					</a> dok se ta količina linearno spušta do beta kod 
+					<a href="#CLOPNGALG" title="CLONGALG">CLONALG</a> algoritma. 
+					(u formulama oznaka <img src="./img/beta.gif" alt="Beta" title="Beta" />)
+				</dd>
+				<dt id="brojNovih"><b>Broj novih</b></dt>
+				<dd>
+					Određuje koliko novih antitijela dolazi u populaciju kod
+					<a href="#CLOPNGALG" title="CLONGALG">CLONALG</a> algoritma
+				</dd>
+				<dt><b>Broj generacija</b></dt>
+				<dd>
+					Određuje nakon koliko generacija se prestaje sa evoluiranjem populacije čestica
+				</dd>
+			</dl>
+		</div>
+		<div>
+            <h2>Objašnjenja pojedinih algoritama</h2>
+            <dl id="SAIS">
+                <h3>Simple AIS</h3>
+                <dt><b>Pseudokod</b></dt>
+                <dd>
+				<pre>Inicijaliziraj
+Dok nije kraj
+	Dodaj sva antitijela u privremenu populaciju
+	Za svako antitijelo 
+		Za i = 1 do <a href="#brojKlonova" title="Broj klonova">broj klonova</a> 
+			Stvori klona
+			Mutiraj klona
+			Dodaj klona u privremenu populaciju
+	Sortiraj privremenu populaciju
+	Uzmi najboljih 
+	<a href="#velicinaPopulacije" title="Broj antitijela">antitijela</a> u novu populaciju
+				</pre>
+				<dd>
+			<dl>
+			<dl id="CLONALG">
+                <h3>CLONGALG</h3>
+                <dt><b>Pseudokod</b></dt>
+                <dd>
+				<pre>Inicijaliziraj
+Dok nije kraj
+	Dodaj sva antitijela u privremenu populaciju
+	Za svako antitijelo 
+		Za i = 1 do <a href="#cBrojKlonova" title="Broj klonova">broj klonova</a> 
+			Stvori klona
+			Mutiraj klona
+			Dodaj klona u privremenu populaciju
+	Dodaj <a href="#brojNovih" title="Broj novih">X</a> novih antitijela
+	Sortiraj privremenu populaciju
+	Uzmi najboljih 
+	<a href="#velicinaPopulacije" title="Broj antitijela">antitijela</a> u novu populaciju
+				</pre>
+				<dd>
+				<dt id="cBrojKlonova">Broj klonova<dt>
+				<dd>
+					Broj klonova se računa po formuli 
+					<img src="./img/betaPutaN.gif" alt="Formula" /> 
+					gdje su 
+					<ul>
+						<li>
+							<img src="./img/beta.gif" alt="Beta" /> - 
+							konstanta <a href="#beta" title="Beta">beta</a>
+						</li>
+						<li>
+							<img src="./img/N.gif" alt="N" /> - 
+							<a href="#velicinaPopulacije" title="Broj antitijela">broj antitijela</a>
+						</li>
+						<li>
+							<img src="./img/i.gif" alt="i" /> - 
+							trenutna pozicija antitijela u uzlazno sortiranoj populaciji 
+							po faktoru dobrote počevši od pozicije 1
+						</li>
+					</ul>
+				</dd>
+			<dl>
+		</div>
+		<hr>
+		<div>
+			Korišteni alati otvorenog koda
+			<ul>
+				<li>
+					<a href="http://www.jfree.org/jfreechart/" title="JFreeChart">JFreeChart</a>
+				</li>
+				<li>
+					<a href="http://projects.congrace.de/exp4j/" title="exp4j">exp4j</a>
+				</li>
+			</ul>
+		</div>
+	</body>	
+</html>

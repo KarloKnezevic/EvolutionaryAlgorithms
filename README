@@ -1,0 +1,5 @@
+Projekt za predmet Projekt iz programske potpore. Tema projekta su evolucijski algoritmi.
+
+Potrebne biblioteke su:
+    * exp4j-0.2.9 -> http://projects.congrace.de/exp4j/
+    * jfreechart-1.0.13 -> http://www.jfree.org/jfreechart/

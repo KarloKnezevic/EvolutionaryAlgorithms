@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+		<title>Optimizacija kolonijom mrava</title>
+	</head>
+
+	<body>
+		<h1>Optimizacija kolonijom mrava</h1>
+		<p>
+			PAŽNJA!<br />
+			Biblioteka JFreeChart koja se koristi je malo veća te stoga i učitavanje appleta prvi puta traje malo duže. Budite strpljivi.<br />
+			Također morate imati instaliran Java plugin za Vaš preglednik kako biste mogli pokrenuti program.
+		</p>
+		<script src="http://www.java.com/js/deployJava.js"></script>
+		<script> 
+			var attributes = { 
+				code : 'ea.KolonijaMravaAlgoritam', 
+				archive : "ea.jar,exp4j-0.2.9.jar,jcommon-1.0.16.jar,jfreechart-1.0.13.jar" ,
+				width : 140, 
+				height : 35
+			} ;  
+			deployJava.runApplet(attributes, { }, '1.6'); 
+		</script>
+		<div>
+			<p>
+				<a href="index.html" title="Evolucijski algoritmi">Evolucijski algoritmi</a>
+			</p>
+			<h2>Pojašnjenje opcija</h2>
+			<dl>
+				<dt><b>Gradovi</b></dt>
+				<dd>
+					koordinate gradova u formatu 
+                    <img src="./img/formatGradova.gif" title="Format gradova" alt="Format gradova" />. 
+                    Za gradove unesene kao pocetne vrijednosti, optimalna putanja je oko 7542
+				</dd>
+				<dt><b>Sjeme</b></dt>
+				<dd>
+					Cijeli broj koji se koristi kao sjeme za generator nasumičnih brojeva
+				</dd>
+				<dt id="brojMrava"><b>Broj mrava</b></dt>
+				<dd>
+					Određuje koliko se mrava seće
+				</dd>
+				<dt id="algoritam"><b>Algoritam</b></dt>
+				<dd>
+					Određuje koji se algoritam koristi za simulaciju. Moguće je odabrati izmedu sljedećih algoritama
+                    <ul>
+                        <li><a href="#simpleACA" title="Simple ACO">Simple ACO</a></li>
+                        <li><a href="#AS" title="Ant System">Ant System</a></li>
+                    </ul>
+				</dd>
+				<dt id="konstantaIsparavnaja"><b>Konstanta isparavanja</b></dt>
+				<dd>
+					konstanta isparavanja koja određuje kojim intenzitetom se obavlja isparavanje
+                    (u formulama oznaka <img src="./img/ro.gif" alt="Konstanta isparavanja" title="Konstanta isparavanja" />)
+				</dd>
+				<dt id="alfa"><b>Alfa</b></dt>
+				<dd>
+					konstanta alfa (u formulama oznaka <img src="./img/alfa.gif" alt="Alfa" title="Alfa" />)
+				</dd>
+				<dt id="beta"><b>Beta</b></dt>
+				<dd>
+					konstanta beta (u formulama oznaka <img src="./img/beta.gif" alt="Beta" title="Beta" />)
+				</dd>
+				<dt id="brojMravaAzurira"><b>Broj mrava azurira</b></dt>
+				<dd>
+					Određuje koliko se mrava sa najboljim rješenjem korisit za ažuriranje feromonskih tragova
+				</dd>
+				<dt><b>Broj šetnji</b></dt>
+				<dd>
+					Određuje koliko šetnji će svaki mrav napraviti
+				</dd>
+			</dl>
+		</div>
+        <div>
+            <h2>Objašnjenja pojedinih algoritama</h2>
+            <dl id="simpleACA">
+                <h3>Simple Ant Colony Algorithm</h3>
+                <dt><b>Pseudokod</b></dt>
+                <dd>
+                    <pre>
+Inicijaliziraj tragove
+Dok nije kraj
+	Za svakog od <a href="#brojMrava" title="Broj mrava">X</a> mrava
+		Obavi šetnju
+	Ažuriraj globalno najbolje rješenje
+	Za <a href="#brojMravaAzurira" title="Broj mrava azrurira">Y</a> najboljih mrava
+		Ažuriraj tragove puteva kojima je prošao
+	Ispari tragove
+                    </pre>
+                </dd>
+                <dt><b>Inicijaliziraj tragove</b></dt>
+                <dd>
+                    Svakom putu se na pošetku postavlja količina feromona od 0.001 jedinica
+                </dd>
+                <dt><b>Odabir puta</b></dt>
+                <dd>
+                    Svaki mrav bira sljedeće odrediste iz skupa gradova koje još nije posjetio
+                    (budic da radimo sa potpuno povezanim grafom, iz svakog grada se može docć u sve preostale)
+                    sa vjerojatnošću 
+                    <img 
+                        src="./img/vjerojatnostOdabiraPuta.gif" title="Vjerojatnost odabira puta" 
+                        alt="Vjerojatnost odabira puta" 
+                    />
+                    gdje su
+                    <ul>
+                        <li> 
+                            <img 
+                                src="./img/vjerojatnostOdabira.gif" title="Vjerojatnost odabira grada" 
+                                alt="Vjerojatnost odabira grada" 
+                            /> - vjerojatnost odabira puta iz grada <i>i</i> u grad <i>j</i>
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/skupGradova.gif" title="Skup gradova" 
+                                alt="Skup gradova" 
+                            /> - skup gradova koje nismo posjetili
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/jakostTraga.gif" title="Jakost feromona" 
+                                alt="Jakost feromona" 
+                            /> - jakost feromona na putu iz grada <i>i</i> u grad <i>j</i>
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/alfa.gif" title="Alfa" 
+                                alt="Alfa" 
+                            /> - <a href="#alfa" title="Alfa">alfa konstanta</a>
+                        </li>
+                    </ul>
+                </dd>
+                <dt><b>Ažuriranje tragova</b></dt>
+                <dd>
+                    Svaki mrav ažurira tragove na putu kojim je prošao koristeći relacije 
+                    <img 
+                        src="./img/azuriranjeTragova.gif" title="Azuriranje tragova" 
+                        alt="Azuriranje tragova" 
+                    /> i 
+                    <img 
+                        src="./img/deltaTraga.gif" title="Delta traga" 
+                        alt="Delta traga" 
+                    />
+                    gdje su
+                    <ul>
+                        <li> 
+                            <img 
+                                src="./img/duljinaPuta.gif" title="Duljina puta" 
+                                alt="Duljina puta" 
+                            /> - duljina puta mrava koji ažurira
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/jakostTraga.gif" title="Jakost feromona" 
+                                alt="Jakost feromona" 
+                            /> - jakost feromona na putu iz grada <i>i</i> u grad <i>j</i>
+                        </li>
+                    </ul>
+                </dd>
+                <dt><b>Isparavanje tragova</b></dt>
+                <dd>
+                    Svim putevima se tragovi ažuriraju koristeći relaciju
+                    <img 
+                        src="./img/isparavanjeTragova.gif" title="Azuriranje tragova" 
+                        alt="Azuriranje tragova" 
+                    />
+                    gdje su
+                    <ul>
+                        <li>
+                            <img 
+                                src="./img/ro.gif" title="Konstanta isparavanja" 
+                                alt="Konstanta isparavanja" 
+                            /> - <a href="#konstantaIsparavanja" title="Konstanta isparavanja">Konstanta isparavanja</a>
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/jakostTraga.gif" title="Jakost feromona" 
+                                alt="Jakost feromona" 
+                            /> - jakost feromona na putu iz grada <i>i</i> u grad <i>j</i>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+            <h3>Ant System</h3>
+            <dl id="AS">
+                <dt><b>Pseudokod</b></dt>
+                <dd>
+                    <pre>
+Inicijaliziraj tragove
+Dok nije kraj
+	Za svakog od <a href="#brojMrava" title="Broj mrava">X</a> mrava
+		Obavi šetnju
+	Ažuriraj globalno najbolje rješenje
+	Ispari tragove
+	Za svakog od <a href="#brojMrava" title="Broj mrava">X</a> mrava
+		Ažuriraj tragove puteva kojima je prosao
+                    </pre>
+                </dd>
+                <dt><b>Inicijaliziraj tragove</b></dt>
+                <dd>
+                    Svakom putu se na pocetku postavlja količina feromona jednaka recipročnoj vrijednosti
+                    duljini puta pronađenoj uz pomoc pohlepnog algoritma
+                </dd>
+                <dt><b>Odabir puta</b></dt>
+                <dd>
+                    Svaki mrav bira sljedeće odredište iz skupa gradova koje još nije posjetio
+                    (budući da radimo sa potpuno povezanim grafom, iz svakog grada se moze doći u sve preostale)
+                    sa vjerojatnošću 
+                    <img 
+                        src="./img/vjerojatnostOdabiraPutaAS.gif" title="Vjerojatnost odabira puta" 
+                        alt="Vjerojatnost odabira puta" 
+                    />
+                    gdje su
+                    <ul>
+                        <li> 
+                            <img 
+                                src="./img/vjerojatnostOdabira.gif" title="Vjerojatnost odabira grada" 
+                                alt="Vjerojatnost odabira grada" 
+                            /> - vjerojatnost odabira puta iz grada <i>i</i> u grad <i>j</i>
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/skupGradova.gif" title="Skup gradova" 
+                                alt="Skup gradova" 
+                            /> - skup gradova koje nismo posjetili
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/jakostTraga.gif" title="Jakost feromona" 
+                                alt="Jakost feromona" 
+                            /> - jakost feromona na putu iz grada <i>i</i> u grad <i>j</i>
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/heuristika.gif" title="Vrijednost heuristicke funkcije" 
+                                alt="Vrijednost heuristicke funkcije" 
+                            /> - vrijednost heurističke funkcije na putu iz grada <i>i</i> u grad <i>j</i> 
+                            (u našem slucaju recipročna vrijednost njihove međusobne udaljenosti)
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/alfa.gif" title="Alfa" 
+                                alt="Alfa" 
+                            /> - <a href="#alfa" title="Alfa">alfa konstanta</a>
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/beta.gif" title="Beta" 
+                                alt="Beta" 
+                            /> - <a href="#beta" title="Beta">beta konstanta</a>
+                        </li>
+                    </ul>
+                </dd>
+                <dt><b>Ažuriranje tragova</b></dt>
+                <dd>
+                    Svaki mrav ažurira tragove na putu kojim je prošao koristeći relacije 
+                    <img 
+                        src="./img/azuriranjeTragova.gif" title="Azuriranje tragova" 
+                        alt="Azuriranje tragova" 
+                    /> i 
+                    <img 
+                        src="./img/deltaTraga.gif" title="Delta traga" 
+                        alt="Delta traga" 
+                    />
+                    gdje su
+                    <ul>
+                        <li> 
+                            <img 
+                                src="./img/duljinaPuta.gif" title="Duljina puta" 
+                                alt="Duljina puta" 
+                            /> - duljina puta mrava koji ažurira
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/jakostTraga.gif" title="Jakost feromona" 
+                                alt="Jakost feromona" 
+                            /> - jakost feromona na putu iz grada <i>i</i> u grad <i>j</i>
+                        </li>
+                    </ul>
+                </dd>
+                <dt><b>Isparavanje tragova</b></dt>
+                <dd>
+                    Svim putevima se tragovi ažuriraju koristeći relaciju
+                    <img 
+                        src="./img/isparavanjeTragova.gif" title="Azuriranje tragova" 
+                        alt="Azuriranje tragova" 
+                    />
+                    gdje su
+                    <ul>
+                        <li>
+                            <img 
+                                src="./img/ro.gif" title="Konstanta isparavanja" 
+                                alt="Konstanta isparavanja" 
+                            /> - <a href="#konstantaIsparavanja" title="Konstanta isparavanja">Konstanta isparavanja</a>
+                        </li>
+                        <li> 
+                            <img 
+                                src="./img/jakostTraga.gif" title="Jakost feromona" 
+                                alt="Jakost feromona" 
+                            /> - jakost feromona na putu iz grada <i>i</i> u grad <i>j</i>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+		<hr>
+		<div>
+			Korišteni alati otvorenog koda
+			<ul>
+				<li>
+					<a href="http://www.jfree.org/jfreechart/" title="JFreeChart">JFreeChart</a>
+				</li>
+				<li>
+					<a href="http://projects.congrace.de/exp4j/" title="exp4j">exp4j</a>
+				</li>
+			</ul>
+		</div>
+	</body>	
+</html>
